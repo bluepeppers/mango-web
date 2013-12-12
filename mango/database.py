@@ -2,12 +2,16 @@ from mongoengine import *
 import json, datetime, bson
 
 class Alarm(Document):
-    name = StringField(required=True)
+    name = StringField(primary_key=True)
     time = DateTimeField(required=True)
     activated = BooleanField(default=True)
 
     def to_json(self):
         return bson.json_util.dumps(obj)
+
+class MovementData(Document):
+    day = DateTimeField(required=True)
+    movementdata = ListField(required=True)
 
 def returnJsonFromRaw(rawJson):
     raw_data = json.loads(rawJson)
@@ -37,3 +41,15 @@ def activateAlarm(name):
     print "Alarm " + name + " saved."
     return
     
+def getTodaysMovement():
+    today = Date.today()
+    return MovementData.objects(day__gte=today)
+
+def getWeeksMovement():
+    weekago = Date.today() - timedelta(7)
+    return MovementData.objects(day__gte=weekago)
+
+def getAllMovement():
+    return Movementdata.objects
+
+
