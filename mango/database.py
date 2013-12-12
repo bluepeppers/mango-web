@@ -6,6 +6,10 @@ class Alarm(Document):
     time = DateTimeField(required=True)
     activated = BooleanField(default=True)
 
+class MovementData(Document):
+    day = DateTimeField(required=True)
+    movementdata = ListField(required=True)
+
 def returnJsonFromRaw(rawJson):
     raw_data = json.loads(rawJson)
     if not raw_data:
@@ -34,3 +38,15 @@ def activateAlarm(name):
     print "Alarm " + name + " saved."
     return
     
+def getTodaysMovement():
+    today = Date.today()
+    return MovementData.objects(day__gte=today)
+
+def getWeeksMovement():
+    weekago = Date.today() - timedelta(7)
+    return MovementData.objects(day__gte=weekago)
+
+def getAllMovement():
+    return Movementdata.objects
+
+
