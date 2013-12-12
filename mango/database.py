@@ -1,10 +1,13 @@
 from mongoengine import *
-import json, datetime
+import json, datetime, bson
 
 class Alarm(Document):
     name = StringField(required=True)
     time = DateTimeField(required=True)
     activated = BooleanField(default=True)
+
+    def to_json(self):
+        return bson.json_util.dumps(obj)
 
 def returnJsonFromRaw(rawJson):
     raw_data = json.loads(rawJson)
