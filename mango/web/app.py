@@ -1,13 +1,11 @@
 from flask import *
 import mongoengine
 
-from mango import models
-
 app = Flask(__name__)
 
-@app.prerequest
+@app.before_request
 def insert_connection():
     g.mongo = mongoengine.connect('mango')
 
-from .android import android
-app.register_blueprint(android, url_prefix="/android")
+from .alarm import alarm
+app.register_blueprint(alarm, url_prefix="/")
